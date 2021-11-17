@@ -21,7 +21,6 @@ import com.pixelmonmod.pixelmon.enums.EnumRibbonType;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.enums.forms.EnumSpecial;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
-import de.waterdu.aquaauras.auras.AuraStorage;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -120,12 +119,11 @@ public class PokeSay {
 
         int i = 1;
         Hotbar playerHotbar = player.getInventory().query(Hotbar.class);
-        Iterator<Inventory> hotBarIterator = playerHotbar.slots().iterator();
 
-        while (hotBarIterator.hasNext()) {
-            Slot hotBarslot = (Slot) hotBarIterator.next();
+        for (Inventory inventory : playerHotbar.slots()) {
+            Slot hotBarslot = (Slot) inventory;
 
-            Optional<ItemStack> itemStackOptional = hotBarslot.peek();
+            Optional <ItemStack> itemStackOptional = hotBarslot.peek();
             if (itemStackOptional.isPresent() && itemStackOptional.get().getType() != ItemTypes.AIR && !itemStackOptional.get().isEmpty() && !isBlacklisted(itemStackOptional.get())) {
                 String key = "{item" + i + "}";
                 placeholders.put(key, buildItemName(itemStackOptional.get()));
@@ -148,8 +146,8 @@ public class PokeSay {
             if (matches != 0) {
                 String[] splitMessage = plainMsg.split(Pattern.quote(placeholder));
                 Text.Builder finalMsgBuilder = Text.builder();
-                for (int i = 0; i < splitMessage.length; i++) {
-                    finalMsgBuilder.append(Text.of(splitMessage[i]));
+                for (String s : splitMessage) {
+                    finalMsgBuilder.append(Text.of(s));
                     if (matches > 0) {
                         finalMsgBuilder.append(placeholders.get(placeholder));
                         matches--;
@@ -239,13 +237,6 @@ public class PokeSay {
         moves.add((moveset.get(2)==null) ? "&bNone" : "&b"+moveset.get(2).getActualMove().getAttackName());
         moves.add((moveset.get(3)==null) ? "&bNone" : "&b"+moveset.get(3).getActualMove().getAttackName());
 
-        List<String> PokemonAuras = new ArrayList<>();
-        AuraStorage auras = new AuraStorage(pokemon.getPersistentData());
-        if(auras.hasAuras()) {
-            auras.getAuras().forEach(aura -> {
-                if(aura.isEnabled()) PokemonAuras.add(aura.getAuraDefinition().getDisplayName() + " " + aura.getEffectDefinition().getDisplayName());
-            });
-        }
 
         DecimalFormat df = new DecimalFormat("#0.##");
         int numEnchants = 0;
@@ -262,16 +253,13 @@ public class PokeSay {
         TextColor nameColor = TextColors.DARK_AQUA;
         String pokeName = "&3" + displayName;
 
-        if(auras.hasAuras()) {
-            nameColor = TextColors.AQUA; pokeName = "&b" + displayName;
-        }
         if(pokemon.isShiny() && !pokemon.isEgg()) {
             nameColor = TextColors.GOLD; pokeName = "&6" + displayName;
         }
-        if(EnumSpecies.legendaries.contains(pokemon.getSpecies().name)) {
+        if(EnumSpecies.legendaries.contains(pokemon.getSpecies())) {
             nameColor = TextColors.LIGHT_PURPLE; pokeName = "&d" + displayName;
         }
-        if(EnumSpecies.ultrabeasts.contains(pokemon.getSpecies().name)) {
+        if(EnumSpecies.ultrabeasts.contains(pokemon.getSpecies())) {
             nameColor = TextColors.DARK_GREEN; pokeName = "&2" + displayName;
         }
         if(!Strings.isNullOrEmpty(customTexture)) {
@@ -283,9 +271,6 @@ public class PokeSay {
                 (new PokemonSpec("unbreedable").matches(pokemon) ? "&4Unbreedable" + "\n&r" : "") +
 
                 (displayRibbon != EnumRibbonType.NONE ? "&7Ribbon: &e" + displayRibbon.name() + "\n&r" : "") +
-
-                (!PokemonAuras.isEmpty() ? "&7Aura 1: " + PokemonAuras.get(0) + "\n&r" : "") +
-                (auras.aurasEnabled() > 1 ? "&7Aura 2: " + PokemonAuras.get(1) + "\n&r" : "") +
 
 				(pokemon.hasGigantamaxFactor() ? "&cGigantamax Potential" + "\n&r": "") +
                 (pokemon.getDynamaxLevel() > 0 ? "&7Dynamax Level: &d" + pokemon.getDynamaxLevel() + "\n&r": "") +
