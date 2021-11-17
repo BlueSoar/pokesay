@@ -1,4 +1,4 @@
-Args: "--in-jar", "C:\Users\Gebruiker\Documents\GitHub\pokesay\build\libs\chatshow-1.5.9-S7.2.jar", "--out-jar", "C:\Users\Gebruiker\Documents\GitHub\pokesay\build\reobfJar\output.jar", "--srg-in", "C:\Users\Gebruiker\Documents\GitHub\pokesay\build\createMcpToSrg\output.tsrg", "--live"
+Args: "--in-jar", "C:\Users\Gebruiker\Documents\GitHub\pokesay\build\libs\chatshow-1.6.0-S7.2.jar", "--out-jar", "C:\Users\Gebruiker\Documents\GitHub\pokesay\build\reobfJar\output.jar", "--srg-in", "C:\Users\Gebruiker\Documents\GitHub\pokesay\build\createMcpToSrg\output.tsrg", "--live"
 Classpath: C:\Users\Gebruiker\.gradle\caches\forge_gradle\maven_downloader\net\md-5\SpecialSource\1.8.3\SpecialSource-1.8.3-shaded.jar
 Classpath: C:\Users\Gebruiker\Documents\GitHub\pokesay\libs\AquaAuras-1.12.2-3.1.1-universal.jar
 Classpath: C:\Users\Gebruiker\Documents\GitHub\pokesay\libs\Atlantis-3.2.18.jar
